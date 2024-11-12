@@ -1,0 +1,30 @@
+{
+ "Övning1": {
+ "titel": "Vaktposten",
+ "författare": "Lee Child",
+ "sidor": 340
+},
+
+"Övning2": {
+ "favoriteMovies":[
+  "Matrix", "Matrix reloaded", "Matrix Revolutions"
+ ]
+},
+
+"Övning3": {
+ "Student": {
+  "name": "Thomas",
+  "age": 46,
+  "adress":{
+   "street": "Domarevägen",
+   "postNr": 43344,
+   "town": "Partille"
+ }
+}}
+
+}
+
+
+
+
+
