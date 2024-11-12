@@ -20,10 +20,15 @@
 
 // -------------------------------------------------------------
 
-// Övning 4 - Parse JSON-sträng. Svårighetsgrad: Medel
+//! Övning 4 - Parse JSON-sträng. Svårighetsgrad: Medel
 
 // Uppgift: Givet en JSON-sträng: const jsonString = '{"namn": "Erik", "ålder": 25}';
 // parse den och extrahera värdet av ett specifikt fält.
+// ? const jsonString = '{"namn": "Erik", "ålder": 25}';
+// const obj = JSON.parse(jsonString);
+
+// console.log(obj.namn);
+
 
 // -------------------------------------------------------------
 
@@ -42,18 +47,21 @@
 
 // -------------------------------------------------------------
 
-// Övning 6 - Konvertera JavaScript-objekt till JSON. Svårighetsgrad: Medel
+//! Övning 6 - Konvertera JavaScript-objekt till JSON. Svårighetsgrad: Medel
 
 // Uppgift: Konvertera ett givet JavaScript-objekt till en JSON-sträng med JSON.stringify().
 
 // JavaScript-objekt:
-// const person = {
-//     name: "Oskar",
-//     age: 28,
-//     hobbies: ["musik", "sport"]
-//   };
+const person = {
+    name: "Oskar",
+    age: 28,
+    hobbies: ["musik", "sport"]
+  };
 
 // Konvertering till JSON-sträng:
+
+const personString = JSON.stringify(person)
+console.log(personString)
 
 // -------------------------------------------------------------
 
@@ -63,20 +71,23 @@
 
 // -------------------------------------------------------------
 
-// Övning 8 - Filtera data från JSON. Svårighetsgrad: Svår
+//! Övning 8 - Filtera data från JSON. Svårighetsgrad: Svår
 
 // Uppgift: Givet en JSON-array av produkter, filtrera ut alla produkter som kostar över ett visst belopp.
 
 // Exempeldata:
-// const products = [
-//     { "name": "Product A", "price": 100 },
-//     { "name": "Product B", "price": 250 },
-//     { "name": "Product C", "price": 150 },
-//     { "name": "Product D", "price": 300 }
-//   ];
+const products = [
+    { "name": "Product A", "price": 100 },
+    { "name": "Product B", "price": 250 },
+    { "name": "Product C", "price": 150 },
+    { "name": "Product D", "price": 300 }
+  ];
 
-//   const priceLimit = 200;
+  const priceLimit = 200;
 
+  const overPriceLimit = products.filter(products => products.price > priceLimit);
+
+  console.log(overPriceLimit);
 // Filtrering:
 
 // -------------------------------------------------------------
@@ -86,16 +97,20 @@
 // Uppgift: Uppdatera värdet på ett fält i en JSON-struktur och konvertera det tillbaka till en sträng.
 
 // Given JSON-sträng:
-// let jsonString = '{"namn": "Karin", "ålder": 30}';
+let jsonString = '{"namn": "Karin", "ålder": 30}';
 
 // Uppdatering och konvertering:
 // Parse JSON-strängen till ett objekt:
 
+const obj = JSON.parse(jsonString);
+
 // Uppdatera fältet "ålder"
+obj.ålder = 31
 
 // Konvertera tillbaka till JSON-sträng
+jsonString = JSON.stringify(obj);
 
-// console.log(jsonString);
+console.log(jsonString);
 
 // Output:
 // '{"namn":"Karin","ålder":31}'
@@ -107,20 +122,31 @@
 
 // START: Skapa din funktion: safeParseJSON här:
 
+function safeParseJSON(jsonString) {
+    try {
+      return JSON.parse(jsonString);
+    } catch (error) {
+      console.error("Ogiltig JSON:", error.message);
+      return null;
+    }
+  }
+
 // /SLUT på functionen safeParseJSON.
 
 // Exempelanvändning:
 
-// const korrektJSON = '{"namn": "Per", "ålder": 40}';
-// const ogiltigJSON = '{namn: "Per", ålder: 40}';
+const korrektJSON = '{"namn": "Per", "ålder": 40}';
+const ogiltigJSON = '{namn: "Per", ålder: 40}';
+
+
 
 // Parsar korrekt JSON:
-// const data1 = safeParseJSON(korrektJSON);
-// console.log(data1); // Output: { namn: 'Per', ålder: 40 }
+const data1 = safeParseJSON(korrektJSON);
+console.log(data1); // Output: { namn: 'Per', ålder: 40 }
 
 // Försök att parsa ogiltig JSON:
-// const data2 = safeParseJSON(ogiltigJSON);
+const data2 = safeParseJSON(ogiltigJSON);
 // Output: Ogiltig JSON: Unexpected token n in JSON at position 1
-// console.log(data2); // Output: null
+console.log(data2); // Output: null
 
 // Tips: try/catch

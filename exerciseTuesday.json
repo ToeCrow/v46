@@ -20,9 +20,36 @@
    "postNr": 43344,
    "town": "Partille"
  }
-}}
+}},
+
+"Övning5": {
+ "namn": "Lisa",
+ "ålder": 30,
+ "stad":"Malmö"
+},
+
+"Övning6": {
+ "name":"Oskar","age":28,"hobbies":["musik","sport"]
+},
+
+"Övning7": {
+"Spellista": [
+ {
+  "titel": "Bad",
+  "artist":"Michael Jackson"
+ },
+ {
+  "titel":"All I want for christmas",
+  "artist":"Mariah Carey"
+ }
+]
+}
+
 
 }
+
+
+
 
 
 
