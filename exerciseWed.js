@@ -6,27 +6,38 @@
 
 // Du har följande objekt:
 
-// const user = {
-//   id: 1,
-//   name: "Alice",
-//   password: "secret123",
-//   email: "alice@example.com"
-// };
+const user = {
+  id: 1,
+  name: "Alice",
+  password: "secret123",
+  email: "alice@example.com"
+};
 
 // Uppgift:
 // Använd JSON.stringify() med en replacer-funktion för att exkludera password-fältet när du serialiserar objektet till en JSON-sträng.
+
+const result = JSON.stringify(user, (key, value) => {
+ return key === "password" ? undefined : value;
+});
+
+console.log("Övning 1:", result)
 
 // ------------------------------------------------------
 // Övning 2: Använda Reviver-funktionen i JSON.parse()
 
 // Du har följande JSON-sträng:
-// const jsonString = '{"name":"Bob","birthdate":"1990-05-15T00:00:00.000Z"}';
+const jsonString = '{"name":"Bob","birthdate":"1990-05-15T00:00:00.000Z"}';
 // Uppgift:
 
 // Använd JSON.parse() med en reviver-funktion för att konvertera birthdate-fältet till ett JavaScript Date-objekt.
 
 // Tips: Använd new Date() funktionen och eventeuellt denna: instanceof Date
+const obj = JSON.parse(jsonString, (key, value) => {
+ return key === "birthdate" ? new Date(value) : value;
+});
 
+
+console.log("Övning 2:", obj)
 // ------------------------------------------------------
 // Övning 3: Hantera Cirkelreferenser - Denna är okej att "hoppa över" jag tycker den är svår att förstå...
 
@@ -160,6 +171,11 @@
 
 // Spara strängen "Välkommen till webbplatsen!" i localStorage under nyckeln "welcomeMessage".
 // Hämta värdet och visa det i konsolen.
+const welcomeMessage = "Välkommen till webbplatsen!";
+localStorage.setItem("welcomeMessage", welcomeMessage);
+const message = localStorage.getItem("welcomeMessage");
+console.log(message);
+
 
 // ------------------------------------------------------
 // Övning 2: Ta Bort Ett Objekt från LocalStorage
@@ -167,14 +183,14 @@
 // Uppgift:
 
 // Ta bort objektet med nyckeln "welcomeMessage" från localStorage.
-
+localStorage.removeItem("welcomeMessage");
 // ------------------------------------------------------
 // Övning 3: Rensa Hela LocalStorage
 
 // Uppgift:
 
 // Rensa all data från localStorage.
-
+localStorage.clear();
 // ------------------------------------------------------
 // Medel Svårighetsgrad
 
