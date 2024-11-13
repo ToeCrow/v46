@@ -35,6 +35,9 @@ colorSelect.addEventListener("change", function(){
 // Uppgift 3: Räkna Antal Ord
 // Beskrivning: Skapa en funktion som räknar antalet ord i en given text. Användaren skriver en mening i en textruta och klickar på en knapp för att få antalet ord i texten.
 
+const str = "Detta är en mening med flera ord";
+const wordsArray = str.split(" "); 
+
 // Uppgift 4: Byt ut Ord i Text
 // Beskrivning: Skapa en funktion som byter ut ett specifikt ord i en mening. Användaren skriver en mening, ordet som ska bytas ut, och det nya ordet i tre olika fält och klickar sedan på en knapp för att se den uppdaterade meningen.
 
@@ -84,5 +87,5 @@ users.forEach(user => {
 });
 
 let today = Date();
-console.log(today)
+console.log("Today is " + today)
 
