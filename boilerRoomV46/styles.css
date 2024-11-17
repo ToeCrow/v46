@@ -1,13 +1,246 @@
 body {
  margin: 0;
  padding: 0;
+ height: 100vh;
+ font-family: 'Arial', sans-serif; /* Enkel, ren typsnitt */
+ background: #f5f5f5; /* Ljus bakgrundsfärg för hela sidan */
+ color: #333; /* Standard textfärg för bra kontrast */
 }
 
+/* HEADER */
 header {
+ text-align: center;
+ padding: 10px; /* Minskat padding för mindre höjd */
+ background: #fff; /* Vit bakgrund för headern */
+ margin-bottom: 10px; /* Mindre avstånd till main */
+ font-size: 1.2rem; /* Mindre textstorlek */
+ color: #333; /* Mörk text för god kontrast */
+ border-bottom: 1px solid #ddd; /* Lätt kant för att avgränsa headern från main */
+}
+
+/* MAIN */
+main {
+ display: grid;
+ grid-template-areas: 
+   "buttons" 
+   "taskContainer" 
+   "footer";
+ grid-template-rows: auto auto auto;
+ grid-template-columns: 1fr;
+ max-width: 1200px;  /* Begränsar bredden för att hålla layouten responsiv */
+ margin: 0 auto;  /* Centrera på skärmen */
+ padding: 20px;
+ box-sizing: border-box; /* Gör så att padding ingår i storleken */
+}
+
+/* LABEL */
+.label {
+ font-weight: bold;
+ color: #444;  /* Mörkare nyans för bra läsbarhet */
+ margin-bottom: 0.5rem;
+ display: inline-block;
+}
+
+/* BUTTONS */
+#buttons {
+ margin: 1rem 0;
+ grid-area: buttons;
+ display: flex;
+ justify-content: center;
+ gap: 1rem;  /* Använd gap istället för att lägga till margin på varje knapp */
+}
+
+#buttons button {
+ padding: 10px 20px;
+ background: #4CAF50;  /* Grön bakgrund för knappar */
+ color: white;
+ border: none;
+ border-radius: 5px;
+ font-size: 1rem;
+ cursor: pointer;
+ transition: background 0.3s ease, transform 0.1s ease;
+}
+
+#buttons button:hover {
+ background: #45a049;  /* Lite mörkare grön vid hovring */
+ transform: translateY(-2px);  /* Lätt uppåtrörelse för att ge 3D-effekt */
+}
+
+#buttons button:active {
+ transform: translateY(2px);  /* När knappen är tryckt, ger en nedtryckt effekt */
+}
+
+/* TASK CONTAINER */
+#taskContainer {
+ grid-area: taskContainer;
+ height: auto;
+ height: clamp(200px, 75vh, 75vw);  
+ width: clamp(200px, 75vw, 75vh); 
+ overflow-y: scroll;
+ margin: 0 auto;
+ background: #fff; /* Vit bakgrund */
+ border: 1px solid #ddd; /* Subtil kant */
+ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
+             0 1px 3px rgba(0, 0, 0, 0.08); /* Yttre skuggeffekt */
+ border-radius: 8px; /* Mjuka hörn */
+ padding: 20px; /* Inre marginal för innehåll */
+ 
+ /* Texture effect to mimic paper */
+ background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+                   linear-gradient(90deg, rgba(255, 255, 255, 0.6) 1px, transparent 1px);
+ background-size: 8px 8px; /* Skapar en rutnätseffekt */
+ 
+ /* Inre skugga för att få papperskänsla */
+ box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.1), 
+             inset 0 -2px 4px rgba(0, 0, 0, 0.07);
+
+ /* Lättare övergång mellan tillstånd */
+ transition: all 0.3s ease;
+
+ /* Lättare "knappt synliga" textur för papperskänsla */
+ filter: contrast(95%) brightness(105%);
+}
+
+#taskContainer:hover {
+ /* Skapa en mjuk effekt när man hovrar för att likna användning av papper */
+ box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2), 
+             0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* TASK LIST */
+#taskList {
+ list-style-type: none;  /* Ta bort punktmarkering */
+ padding: 0;
+ margin: 0;
+
+ /* Bakgrundsstruktur för att ge papperskänsla */
+ background: #fff;
+ background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+                   linear-gradient(90deg, rgba(255, 255, 255, 0.6) 1px, transparent 1px);
+ background-size: 8px 8px; /* Rutnätsstruktur för att efterlikna papper */
+ 
+ /* Inre skugga för pappersliknande effekt */
+ box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.1), 
+             inset 0 -2px 4px rgba(0, 0, 0, 0.07);
+ 
+ /* Lättare skugga på listan för att ge en upphöjd känsla */
+ border: 1px solid #ddd; 
+ border-radius: 8px;  /* Mjuka hörn */
+ padding: 10px;  /* Inre marginal för att göra listan mer kompakt */
+
+ /* Övergångseffekt för att göra interaktioner smidigare */
+ transition: all 0.3s ease;
+}
+
+#taskList li {
+ padding: 8px 10px;
+ border-bottom: 1px solid #ddd;
+ margin-bottom: 8px;
+ font-size: 1rem;
+ background: #fff;
+ box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05); /* Lätt inre skugga för varje listobjekt */
+ border-radius: 5px;
+ transition: box-shadow 0.2s ease-in-out;
+}
+
+#taskList li:last-child {
+ border-bottom: none;  /* Ingen bottenkant på sista listobjektet */
+}
+
+#taskList li:hover {
+ box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1); /* Förstärkta skuggor vid hovring */
+}
+
+/* Small text */
+small {
+ font-size: 0.8rem;
+ display: inline-block;
+ width: 85%;
+}
+
+/* FOOTER */
+footer {
+ grid-area: footer;
+ text-align: center;
+ padding: 15px;
+ font-size: 0.9rem;
+ color: #777;
+ background-color: #fff;
+ border-top: 1px solid #ddd;
+ margin-top: 20px;
+}
+
+footer p {
+ margin: 5px 0;
+}
+
+/* Modalens bakgrund */
+.modal {
+ display: none; /* Modal är gömd från början */
+ position: fixed;
+ z-index: 1;
+ left: 0;
+ top: 0;
+ width: 100%;
+ height: 100%;
+ background-color: rgba(0, 0, 0, 0.5); /* Svart transparent bakgrund */
+ padding-top: 100px; /* Placera modalen centralt */
  text-align: center;
 }
 
+/* Modalens innehåll */
+.modal-content {
+ background-color: white;
+ margin: auto;
+ padding: 20px;
+ border: 1px solid #888;
+ width: 300px;
+ border-radius: 5px;
+}
 
-.label {
+/* Stäng-knappen */
+.close {
+ color: #aaa;
+ float: right;
+ font-size: 28px;
  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+ color: black;
+ text-decoration: none;
+ cursor: pointer;
+}
+
+/* Remove Button */
+#removeButton {
+ padding: 10px 20px;
+ background-color: red;
+ color: white;
+ border: none;
+ border-radius: 5px;
+ font-size: 1rem;
+ cursor: pointer;
+ transition: background 0.3s ease, transform 0.1s ease;
+}
+
+#removeButton:hover {
+ background-color: darkred;
+}
+
+#removeButton:active {
+ background-color: #8B0000;
+}
+
+/* Back Button */
+#backButton {
+ padding: 10px 20px;
+ background-color: #4CAF50;
+ color: white;
+ border: none;
+ border-radius: 5px;
+ font-size: 1rem;
+ cursor: pointer;
+ transition: background 0.3s ease, transform 0.1s ease;
 }

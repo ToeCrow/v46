@@ -11,30 +11,21 @@
  <header>
   <!-- Överskrift och en liten beskrivning -->
  <h1>Anteckningar</h1>
- <p>Skriv in titel och anteckning, sen klickar du på spara för att komma igång</p>
+ <p id="helP"></p>
  </header>
  <main>
   <!-- Formulär med titel, text och radio knappar -->
-  <section id="form">
-   <form id="newNoteForm" autocomplete="on">
-    <label class="label" for="inputTitle">Titel</label><br>
-    <input name ="inputTitle" id="inputTitle" placeholder="Titel" type="text" required autofocus><br>
-    <label class="label" for="inputText">Här kan du skriva dina tankar</label><br>
-    <textarea name="inputText" id="inputText" placeholder="Skriv dina anteckningar" cols="30" rows="10" required></textarea><br>
-    <span class="radio">
-     <input id="radioWork" name="radio" type="radio">
-     <label for="radioWork">Jobb</label><br>
-     <input id="radioPrivate" name="radio" type="radio">
-     <label for="radioPrivate">Privat</label>
-    </span>
-    <input id="submitForm" type="button" value="Spara">
-   </form>
-  </section>
   <section id="buttons">
+   <button id="newNoteFormBtn">Skapa nytt</button>
    <button id="showAllBtn">Visa alla</button>
    <button id="clearAllTasks">Rensa Alla</button>
   </section>
+  
   <section id="taskContainer"></section>
+  <footer>
+   <p>&copy; 2024 Anteckningar App. Alla rättigheter förbehållna.</p>
+   <p>Designad av Thomas Kronvold.</p>
+ </footer>
  </main>
  
 </body>
