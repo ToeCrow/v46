@@ -108,17 +108,48 @@ function saveLocalstorage() {
   inputTitle.value = "";
   inputText.value = "";
 
+  // Litet flash när man sparar
+  const flash = document.createElement('div');
+  flash.classList.add('flash');
+  document.body.appendChild(flash);
+  setTimeout(() => document.body.removeChild(flash), 300); // Ta bort efter animation
+
   showAllTasks()
 }
 
 function clearTasks() {
   taskContainer.innerHTML = "";
   localStorage.clear();
+  passwordInput.value = "";
+  noteArray = []; // Rensa minnet också
+}
+
+function checkTasksBeforeAction() {
+  if (noteArray.length === 0) {
+    // helP.innerText = "Det finns inga uppgifter att visa eller ta bort.";
+    helP.style.color = "red";
+    helP.style.fontWeight = "bold";
+
+    // Timer för att återställa färgen och meddelandet efter 5 sekunder
+    setTimeout(() => {
+      // helP.innerText = "Skriv in titel och anteckning, sen klickar du på spara för att komma igång";
+      helP.style.color = "black";
+      helP.style.fontWeight = "normal";
+    }, 5000);
+
+    return false; // Stoppa vidare funktionalitet
+  }
+
+  return true; // Fortsätt om det finns uppgifter
 }
 
 function showAllTasks() {
+  if (!checkTasksBeforeAction()) {
+    return; // Stoppa körningen om inga uppgifter finns
+  }
+
   taskContainer.innerHTML = ""; // Rensa taskContainer först
-  helP.innerText = "Trycka på en uppgift for att visa den, eller klicka på 'Skapa nytt' för att skapa en ny uppgift.";
+  helP.innerText = "Tryck på en uppgift för att visa den, eller klicka på 'Skapa nytt' för att skapa en ny uppgift.";
 
   const taskList = document.createElement("ul"); // Skapa ul för uppgifterna
   taskList.id = "taskList";
@@ -134,19 +165,27 @@ function showAllTasks() {
 
     const showTitle = document.createElement("h3");
     const showTimestamp = document.createElement("small");
-    const removeButton = document.createElement("button");
 
     // Sätt innehåll för varje element
     showTitle.innerText = note.title;
     const formattedDate = formatDate(note.timestamp);
     showTimestamp.innerText = `Skapad: ${formattedDate}`;
 
+    // Lägg till event listener för att visa endast denna uppgift
+    taskItem.addEventListener("click", () => showOneTask(note));
+
+    // Lägg till title och timestamp i taskItem
+    taskItem.appendChild(showTitle);
+    taskItem.appendChild(showTimestamp);
+
+    // Skapa borttagningsknappen
+    const removeButton = document.createElement("button");
     removeButton.innerText = "Ta bort";
-    removeButton.id = `removeButton-${note.id}`;
     removeButton.style.color = "white";
     removeButton.style.backgroundColor = "red";
+    removeButton.style.marginTop = "10px";
 
-    // Klickhändelse för att hantera radering med bekräftelse
+    // Hantera borttagningsknappen
     removeButton.addEventListener("click", function firstClick(event) {
       event.stopPropagation(); // Förhindra att `li`-klick också körs
       removeButton.innerText = "Säker?";
@@ -159,30 +198,33 @@ function showAllTasks() {
         removeButton.removeEventListener("click", secondClick); // Ta bort `secondClick`
       }, 3000);
 
-      function secondClick() {
+      function secondClick(event) {
+        event.stopPropagation(); // Förhindra att `li`-klick också körs
         clearTimeout(timer);
         removeTask(note.id);
+
+        // Kontrollera om det var den sista uppgiften
+        if (noteArray.length === 0) {
+          createForm(); // Återgå till formuläret
+          return; // Avsluta här
+        }
+
         taskList.removeChild(taskItem); // Ta bort från DOM
-        showAllTasks(); 
+        showAllTasks(); // Uppdatera taskList från localStorage
       }
 
       removeButton.addEventListener("click", secondClick, { once: true });
       removeButton.removeEventListener("click", firstClick);
     });
 
-    // Lägg till element i taskItem (li)
-    taskItem.appendChild(showTitle);
-    taskItem.appendChild(showTimestamp);
+    // Lägg till borttagningsknappen till taskItem
     taskItem.appendChild(removeButton);
 
-    // Lägg till event listener för att visa endast denna uppgift
-    taskItem.addEventListener("click", () => showOneTask(note));
-
-    // Lägg till taskItem i taskList
+    // Lägg till taskItem till taskList
     taskList.appendChild(taskItem);
   });
 
-  // Lägg till ul i taskContainer
+  // Lägg till taskList till taskContainer
   taskContainer.appendChild(taskList);
 }
 
@@ -243,6 +285,10 @@ function formatDate(timestamp) {
 }
 
 function deleteAllTasks() {
+
+  if (!checkTasksBeforeAction()) {
+    return; // Stoppa körningen om inga uppgifter finns
+  }
   
   const confirmDelete = document.createElement("div");
   confirmDelete.id = "passwordModal";
@@ -305,4 +351,7 @@ function deleteAllTasks() {
 
    // Visa modalen
    passwordModal.style.display = "block";
+
+   // Sätt fokus på passwordInput
+   passwordInput.focus();
 }
