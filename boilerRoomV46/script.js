@@ -24,10 +24,11 @@ try {
 }
 console.log("efter try/catch", fromStart)
 
-//? Got more than one id= #1 when the page is refreshed, maybe from before fromStart was declared??
+// Hämtar id från den sista i arrayen för att inte få dubletter och laddar noteArray, börja med 0 om det är tomt
 let id = fromStart && fromStart.length > 0  ? fromStart[fromStart.length - 1].id : 0
 let noteArray = fromStart;
 
+// Kollar om det finns nåt i arrayen och väljer "startsida"
 if (!fromStart || fromStart.length === 0) {
   createForm();
 } else {
@@ -71,6 +72,7 @@ function saveLocalstorage() {
   const radioWork = document.getElementById("radioWork");
   const radioPrivate = document.getElementById("radioPrivate");
 
+  // Kolla om båda fälten är ifyllda
   if (!inputTitle.value || !inputText.value) {
     helP.innerText = "Fyll i alla fält";
     helP.style.color = "red";
@@ -114,6 +116,8 @@ function saveLocalstorage() {
   document.body.appendChild(flash);
   setTimeout(() => document.body.removeChild(flash), 300); // Ta bort efter animation
 
+  console.log("efter spara: ", noteArray)
+
   showAllTasks()
 }
 
@@ -121,18 +125,16 @@ function clearTasks() {
   taskContainer.innerHTML = "";
   localStorage.clear();
   passwordInput.value = "";
-  noteArray = []; // Rensa minnet också
+  noteArray = []; // Det fanns kvar data i noteArray till man refreshade sidan annars
 }
 
 function checkTasksBeforeAction() {
   if (noteArray.length === 0) {
-    // helP.innerText = "Det finns inga uppgifter att visa eller ta bort.";
     helP.style.color = "red";
     helP.style.fontWeight = "bold";
 
     // Timer för att återställa färgen och meddelandet efter 5 sekunder
     setTimeout(() => {
-      // helP.innerText = "Skriv in titel och anteckning, sen klickar du på spara för att komma igång";
       helP.style.color = "black";
       helP.style.fontWeight = "normal";
     }, 5000);
@@ -144,24 +146,25 @@ function checkTasksBeforeAction() {
 }
 
 function showAllTasks() {
+  // Avbryt om det inte finns nåt i arrayen
   if (!checkTasksBeforeAction()) {
-    return; // Stoppa körningen om inga uppgifter finns
+    return; 
   }
 
   taskContainer.innerHTML = ""; // Rensa taskContainer först
   helP.innerText = "Tryck på en uppgift för att visa den, eller klicka på 'Skapa nytt' för att skapa en ny uppgift.";
 
-  const taskList = document.createElement("ul"); // Skapa ul för uppgifterna
+  const taskList = document.createElement("ul"); 
   taskList.id = "taskList";
 
   noteArray.forEach((note) => {
-    const taskItem = document.createElement("li"); // Skapa li för varje uppgift
+    const taskItem = document.createElement("li"); 
     taskItem.id = `task-${note.id}`;
-    taskItem.style.border = "1px solid #ddd"; // Enkel styling
+    taskItem.style.border = "1px solid #ddd"; 
     taskItem.style.margin = "10px";
     taskItem.style.padding = "10px";
     taskItem.style.cursor = "zoom-in";
-    taskItem.style.listStyle = "none";
+   
 
     const showTitle = document.createElement("h3");
     const showTimestamp = document.createElement("small");
@@ -203,6 +206,7 @@ function showAllTasks() {
         event.stopPropagation(); // Förhindra att det bubblar vidare
         clearTimeout(timer);
         removeTask(note.id);
+        taskList.removeChild(taskItem); // Ta bort från DOM
 
         // Kontrollera om det var den sista uppgiften
         if (noteArray.length === 0) {
@@ -210,7 +214,6 @@ function showAllTasks() {
           return; 
         }
 
-        taskList.removeChild(taskItem); // Ta bort från DOM
         showAllTasks(); // Uppdatera taskList från localStorage
       }
 
@@ -267,7 +270,8 @@ function showOneTask(note) {
 
 // Funktion för att ta bort uppgiften från noteArray och localStorage
 function removeTask(noteId) {
-  noteArray = noteArray.filter(note => note.id !== noteId); // Ta bort från arrayen
+  // Tar bort alla uppgifter utan det angivna id och lägger dem tillbaka i noteArray
+  noteArray = noteArray.filter(note => note.id !== noteId); 
   localStorage.setItem("noteArray", JSON.stringify(noteArray)); // Uppdatera localStorage
 }
 
@@ -287,9 +291,9 @@ function formatDate(timestamp) {
 }
 
 function deleteAllTasks() {
-
+  // Avbryt om det inte finns nåt i arrayen
   if (!checkTasksBeforeAction()) {
-    return; // Stoppa körningen om inga uppgifter finns
+    return; 
   }
   
   const confirmDelete = document.createElement("div");
@@ -340,9 +344,9 @@ function deleteAllTasks() {
   //! Milliondollarfunction :)
   function resetModal() {
     h2.innerText = "Ange lösenord för att radera alla uppgifter";
-      h2.style.color = "black";
-      h2.style.fontWeight = "normal";
-      passwordInput.value = "";
+    h2.style.color = "black";
+    h2.style.fontWeight = "normal";
+    passwordInput.value = "";
   }
 
   function handlePasswordSubmit() {
