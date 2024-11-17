@@ -184,29 +184,30 @@ function showAllTasks() {
     removeButton.style.color = "white";
     removeButton.style.backgroundColor = "red";
     removeButton.style.marginTop = "10px";
+    removeButton.id = "removeButton";
 
     // Hantera borttagningsknappen
     removeButton.addEventListener("click", function firstClick(event) {
-      event.stopPropagation(); // Förhindra att `li`-klick också körs
+      event.stopPropagation(); // Förhindra att det bubblar vidare
       removeButton.innerText = "Säker?";
       removeButton.style.fontWeight = "bold";
 
       const timer = setTimeout(() => {
         removeButton.innerText = "Ta bort";
-        removeButton.style.fontWeight = ""; // Återställ stil
+        removeButton.style.fontWeight = ""; 
         removeButton.addEventListener("click", firstClick); // Återaktivera `firstClick`
         removeButton.removeEventListener("click", secondClick); // Ta bort `secondClick`
       }, 3000);
 
       function secondClick(event) {
-        event.stopPropagation(); // Förhindra att `li`-klick också körs
+        event.stopPropagation(); // Förhindra att det bubblar vidare
         clearTimeout(timer);
         removeTask(note.id);
 
         // Kontrollera om det var den sista uppgiften
         if (noteArray.length === 0) {
-          createForm(); // Återgå till formuläret
-          return; // Avsluta här
+          createForm(); 
+          return; 
         }
 
         taskList.removeChild(taskItem); // Ta bort från DOM
@@ -252,6 +253,7 @@ function showOneTask(note) {
   backButton.innerText = "Tillbaka";
   backButton.style.marginTop = "20px";
   backButton.addEventListener("click", showAllTasks);
+  backButton.id = "backButton";
 
   // Lägg till alla element i oneTask
   oneTask.appendChild(showTitle);
@@ -349,9 +351,7 @@ function deleteAllTasks() {
     }
   }
 
-   // Visa modalen
+   // Visa modalen och fokus på passwordInput
    passwordModal.style.display = "block";
-
-   // Sätt fokus på passwordInput
    passwordInput.focus();
 }

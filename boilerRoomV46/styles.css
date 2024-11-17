@@ -70,6 +70,10 @@ main {
  transform: translateY(2px);  /* När knappen är tryckt, ger en nedtryckt effekt */
 }
 
+#buttons #clearAllTasks {
+ background-color: red;  /* Röd bakgrund vid knappar */
+}
+
 /* Styling för createForm */
 form#newNoteForm {
  background-color: #ffffff;
@@ -88,7 +92,7 @@ form#newNoteForm label {
 
 form#newNoteForm input[type="text"],
 form#newNoteForm textarea {
- width: 100%;
+ width: 96%;
  padding: 10px;
  margin-bottom: 15px;
  border: 1px solid #ccc;
@@ -319,12 +323,12 @@ footer p {
 
 /* Remove Button */
 #removeButton {
- padding: 10px 20px;
+ padding: 2px 5px;
  background-color: red;
  color: white;
  border: none;
  border-radius: 5px;
- font-size: 1rem;
+ font-size: .8rem;
  cursor: pointer;
  transition: background 0.3s ease, transform 0.1s ease;
 }
@@ -339,12 +343,12 @@ footer p {
 
 /* Back Button */
 #backButton {
- padding: 10px 20px;
+ padding: 2px 5px;
  background-color: #4CAF50;
  color: white;
  border: none;
  border-radius: 5px;
- font-size: 1rem;
+ font-size: .8rem;
  cursor: pointer;
  transition: background 0.3s ease, transform 0.1s ease;
 }
