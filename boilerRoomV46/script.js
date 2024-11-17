@@ -316,12 +316,14 @@ function deleteAllTasks() {
   // Stäng modalen när användaren klickar på 'x'
   closeBtn.addEventListener("click", () => {
   passwordModal.style.display = "none";
+  resetModal();
   });
 
 // Stäng modalen om användaren klickar utanför modalen
   window.addEventListener("click", (event) => {
   if (event.target === passwordModal) {
     passwordModal.style.display = "none";
+    resetModal();
   }
   });
 
@@ -335,6 +337,14 @@ function deleteAllTasks() {
     }
   });
 
+  //! Milliondollarfunction :)
+  function resetModal() {
+    h2.innerText = "Ange lösenord för att radera alla uppgifter";
+      h2.style.color = "black";
+      h2.style.fontWeight = "normal";
+      passwordInput.value = "";
+  }
+
   function handlePasswordSubmit() {
     const enteredPassword = passwordInput.value;
     const correctPassword = "ja";
@@ -342,6 +352,7 @@ function deleteAllTasks() {
       clearTasks();
       passwordModal.style.display = "none";
       createForm();
+      resetModal()
     } else {
       h2.innerText = "Skriv in 'ja' för att radera alla uppgifter.";
       h2.style.color = "red";
