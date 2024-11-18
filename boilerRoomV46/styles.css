@@ -375,3 +375,24 @@ footer p {
  }
 }
 
+#editButton {
+  padding: 10px 20px;
+  background-color: #007BFF; /* Blå bakgrund för redigera-knappen */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease;
+  margin-top: 10px; /* Lätt avstånd till andra element */
+}
+
+#editButton:hover {
+  background-color: #0056b3; /* Mörkare blå vid hovring */
+  transform: translateY(-2px); /* Lätt uppåtrörelse för 3D-effekt */
+}
+
+#editButton:active {
+  transform: translateY(2px); /* Nedtryckt effekt */
+  background-color: #004080; /* Ännu mörkare blå vid aktivt tillstånd */
+}

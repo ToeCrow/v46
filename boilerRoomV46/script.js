@@ -15,7 +15,8 @@ clearAllTasks.addEventListener("click", deleteAllTasks);
 showAllBtn.addEventListener("click", showAllTasks);
 
 // Collects data from localstorage
-let fromStart;
+let fromStart = [];
+console.log("innan try/catch", fromStart)
 try {
   fromStart = JSON.parse(localStorage.getItem("noteArray")) || [];
 } catch (error) {
@@ -35,38 +36,47 @@ if (!fromStart || fromStart.length === 0) {
   showAllTasks();
 }
 
-function createForm() {
-
+function createForm(note = null) {
   taskContainer.innerHTML = ""; // Rensa taskContainer först
-  helP.innerText = "Skriv in titel och anteckning, sen klickar du på spara för att komma igång"
+  helP.innerText = "Skriv in titel och anteckning, sen klickar du på spara för att komma igång";
 
   // Skapa formuläret
   const form = document.createElement("form");
   form.id = "newNoteForm";
   form.autocomplete = "on";
 
-  // Skapa och lägg till formulärelement
+  // Förifyll endast om vi redigerar en befintlig anteckning
+  const titleValue = note && note.title ? note.title : "";
+  const textValue = note && note.text ? note.text : "";
+  const isWorkChecked = note && note.isWork ? "checked" : "";
+  const isPrivateChecked = note && note.isPrivate ? "checked" : "";
+
   form.innerHTML = `
     <label class="label" for="inputTitle">Titel</label><br>
-    <input name="inputTitle" id="inputTitle" placeholder="Titel" type="text" required autofocus><br>
+    <input name="inputTitle" id="inputTitle" placeholder="Titel" type="text" required value="${titleValue}"><br>
     <label class="label" for="inputText">Här kan du skriva dina tankar</label><br>
-    <textarea name="inputText" id="inputText" placeholder="Skriv dina anteckningar" cols="30" rows="10" required></textarea><br>
+    <textarea name="inputText" id="inputText" placeholder="Skriv dina anteckningar" cols="30" rows="10" required>${textValue}</textarea><br>
     <span class="radio">
-      <input id="radioWork" name="radio" type="radio">
+      <input id="radioWork" name="radio" type="radio" ${isWorkChecked}>
       <label for="radioWork">Jobb</label><br>
-      <input id="radioPrivate" name="radio" type="radio">
+      <input id="radioPrivate" name="radio" type="radio" ${isPrivateChecked}>
       <label for="radioPrivate">Privat</label>
     </span><br>
     <input id="submitForm" type="button" value="Spara">
   `;
 
-  // Lägg till formuläret i taskContainer
   taskContainer.appendChild(form);
 
   // Lägg till eventlistener för att spara anteckning
-  document.getElementById("submitForm").addEventListener("click", saveLocalstorage);
+  const submitButton = document.getElementById("submitForm");
+  submitButton.addEventListener("click", () => saveLocalstorage(note ? note.id : null));
+
+  // Sätt fokus på inputTitle
+  const inputTitle = document.getElementById("inputTitle");
+  inputTitle.focus();
 }
-function saveLocalstorage() {
+
+function saveLocalstorage(existingId = null) {
   const inputTitle = document.getElementById("inputTitle");
   const inputText = document.getElementById("inputText");
   const radioWork = document.getElementById("radioWork");
@@ -84,42 +94,35 @@ function saveLocalstorage() {
       helP.style.fontWeight = "normal";
     }, 3000);
 
-    return; // Se till att vi inte sparar om fälten är tomma
+    return;
   }
 
-  id = id + 1;
   const title = inputTitle.value;
   const text = inputText.value;
   const isWork = radioWork.checked;
   const isPrivate = radioPrivate.checked;
-  const timestamp = Date.now();
+  const timestamp = existingId ? noteArray.find(note => note.id === existingId).timestamp : Date.now();
 
-  const note = {
-    id,
-    title,
-    text,
-    isWork,
-    isPrivate,
-    timestamp
-  };
+  if (existingId) {
+    // Uppdatera befintlig anteckning
+    const noteIndex = noteArray.findIndex(note => note.id === existingId);
+    noteArray[noteIndex] = { id: existingId, title, text, isWork, isPrivate, timestamp };
+  } else {
+    // Skapa ny anteckning
+    id = id + 1;
+    noteArray.push({ id, title, text, isWork, isPrivate, timestamp });
+  }
 
-  noteArray.push(note);
   localStorage.setItem("noteArray", JSON.stringify(noteArray));
 
   // Rensa formuläret efter sparning
   inputTitle.value = "";
   inputText.value = "";
 
-  // Litet flash när man sparar
-  const flash = document.createElement('div');
-  flash.classList.add('flash');
-  document.body.appendChild(flash);
-  setTimeout(() => document.body.removeChild(flash), 300); // Ta bort efter animation
-
-  console.log("efter spara: ", noteArray)
-
-  showAllTasks()
+  showAllTasks();
+  console.log("efter sparing", noteArray);
 }
+
 
 function clearTasks() {
   taskContainer.innerHTML = "";
@@ -258,15 +261,25 @@ function showOneTask(note) {
   backButton.addEventListener("click", showAllTasks);
   backButton.id = "backButton";
 
+  // Lägg till en "Redigera"-knapp
+  const editButton = document.createElement("button");
+  editButton.innerText = "Redigera";
+  editButton.style.marginTop = "20px";
+  editButton.style.marginLeft = "10px";
+  editButton.addEventListener("click", () => createForm(note));
+  editButton.id = "editButton";
+
   // Lägg till alla element i oneTask
   oneTask.appendChild(showTitle);
   oneTask.appendChild(showText);
   oneTask.appendChild(showTimestamp);
   oneTask.appendChild(backButton);
+  oneTask.appendChild(editButton);
 
   // Lägg oneTask i taskContainer
   taskContainer.appendChild(oneTask);
 }
+
 
 // Funktion för att ta bort uppgiften från noteArray och localStorage
 function removeTask(noteId) {
@@ -337,6 +350,7 @@ function deleteAllTasks() {
   // Lägg till en event listener för Enter-tangenten
   passwordInput.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
+      event.preventDefault();
       handlePasswordSubmit();
     }
   });
