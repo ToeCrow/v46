@@ -1,0 +1,1 @@
+Öppna mappen boilerRoomV46 och kör index.html i live-server, sen följer man instruktionerna under överskriften 'Anteckningar' för att gå vidare.
